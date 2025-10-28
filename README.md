@@ -10,49 +10,62 @@ git clone https://github.com/sheridan-stable/tfidf-lrt.git
 ```
 and `cd` into the repository root folder `tfidf-lrt`.
 
-## Reproducing Plots
-This section steps through how to reproduce the results from Figures 1, 2, and 3 in the manuscript. Repository code is written in Python 3. Below is one way to reproduce each plot:
+## Reproducing Plots & Tables
+This section steps through how to reproduce the results from Figures 1, 2, 3, and Table 1 in the manuscript. Repository code is written in Python 3. Below is one way to reproduce each plot:
 
 From the command line, create a virtual environment:
-
-## Requirements
-
-- Python 3.x
-- NumPy
-- Pandas
-- Scikit-learn
-- Plotnine
-- Matplotlib
-- SciPy
-
-## Usage
+```
+python3 -m venv .
+source bin/activate
+```
+Install required libraries:
+```
+pip install -r requirements.txt
+```
 
 Each Python script can be run independently:
 
 ```bash
-# Text classification comparison
-python twenty-newsgroups.py
+# Generate beta-binomial plots (Figure 1)
+python3 bcb-precision-plot.py
 
-# Generate beta-binomial precision plots
-python bcb-precision-plot.py
+# Generate likelihood surface comparison plots (Figure 2)
+python3 bcb-comparison-plots.py
 
-# Create likelihood surface comparison plots
-python bcb-comparison-plots.py
+# Generate lambda_i vs TF-IDF scatter plot (Figure 3)
+python3 tfidf-lambda-plot.py
 
-# Generate lambda vs TF-IDF scatter plots
-python tfidf-lambda-plot.py
+# Generate text classification results (Table 2)
+python3 twenty-newsgroups.py
 ```
 
 ## Outputs
 
 The scripts generate several visualization outputs:
 
-- `bcb_precision_plot.pdf`: Visualization of beta-binomial distributions under different α parameters
-- `bcb_comparison_plot.pdf`: 3D surface plots comparing penalized and unpenalized log-likelihood functions
-- `lambda_tfidf.pdf`: Scatter plot showing relationship between λ scores and TF-IDF scores
-- `tf-idf-report.txt`: Classification performance metrics using canonical TF-IDF
-- `lambda-i-report.txt`: Classification performance metrics using λ-transformation
+- `bcb_precision_plot.pdf`: Visualization of beta-binomial distributions under different parameters (Figure 1)
+- `bcb_comparison_plot.pdf`: Contour and 3D surface plots comparing penalized and unpenalized beta-binomial log-likelihood functions (Figure 2)
+- `lambda_tfidf.pdf`: Scatter plot showing relationship between lambda_i scores and TF-IDF scores (Figure 3)
+- `tf-idf-report.txt`: Classification performance metrics using TF-IDF (Table 2)
+- `lambda-i-report.txt`: Classification performance metrics using $S(\lambda_i)$ (Table 2)
 
-## License
 
-See the [LICENSE](LICENSE) file for details.
+
+## Questions and Feedback
+If you have a technical question about the manuscript, feel free to post it as an [issue](https://github.com/Sheridan-Stable/tfidf-lrt/issues).
+
+For more open-ended inquiries, we encourage starting a [discussion](https://github.com/Sheridan-Stable/tfidf-lrt/discussions).
+
+
+## Citation
+If you find anything useful please cite our work using:
+```
+@article{Ahmed202x,
+  author = {Zeyad Ahmed and Paul Sheridan and Michael McIsaac and Aitazaz A. Farooque},
+  title = {Common {TF}–{IDF} variants arise as leading terms in a penalized likelihood-ratio test for word burstiness},
+  journal = {xxxx},
+  year = {202x},
+  pages = {1--xx},
+  doi = {https://doi.org/xxx}
+}
+```
