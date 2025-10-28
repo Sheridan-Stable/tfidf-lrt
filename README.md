@@ -60,12 +60,10 @@ For more open-ended inquiries, we encourage starting a [discussion](https://gith
 ## Citation
 If you find anything useful please cite our work using:
 ```
-@article{Ahmed202x,
+@misc{Ahmed2025,
   author = {Zeyad Ahmed and Paul Sheridan and Michael McIsaac and Aitazaz A. Farooque},
   title = {Common {TF}–{IDF} variants arise as leading terms in a penalized likelihood-ratio test for word burstiness},
-  journal = {xxxx},
-  year = {202x},
-  pages = {1--xx},
-  doi = {https://doi.org/xxx}
+  year = {2025},
+  eprint = {arXiv:XXXX.XXXXX}
 }
 ```
