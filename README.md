@@ -10,7 +10,7 @@ git clone https://github.com/sheridan-stable/tfidf-lrt.git
 ```
 and `cd` into the repository root folder `tfidf-lrt`.
 
-## Reproducing Plots & Tables
+## Reproducing Plots and Tables
 This section steps through how to reproduce the results from Figures 1, 2, 3, and Table 1 in the manuscript. Repository code is written in Python 3. Below is one way to reproduce each plot:
 
 From the command line, create a virtual environment:
