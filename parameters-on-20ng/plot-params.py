@@ -29,9 +29,9 @@ def main():
         ggplot(df_melted, aes(x='Log_Value', fill='Parameter'))
         + geom_histogram(bins=80, alpha=0.90, position='identity', show_legend=True)
         + labs(
-            x='Log parameter value',
+            x='Parameter value',
             y='Frequency',
-            title=r'Empirical distribution of $\alpha_i$ and $\alpha_{\neg i}$',
+            title=r'Empirical distributions of $\alpha_i$ and $\alpha_{\neg i}$',
             fill='Parameter'
         )
         + scale_fill_manual(values={
