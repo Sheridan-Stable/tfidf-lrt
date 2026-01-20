@@ -2,8 +2,9 @@ import numpy as np
 import pandas as pd
 from plotnine import (
     ggplot, aes, geom_histogram, labs, theme_minimal, 
-    scale_fill_manual
+    scale_fill_manual, scale_x_log10, theme, element_blank
 )
+from mizani.transforms import log_trans
 
 def main():
     try:
@@ -11,23 +12,25 @@ def main():
     except FileNotFoundError:
         print("Error: 'bb_params_verification.csv' not found.")
         return
-
-    df['log_alpha_i'] = np.log(df['alpha_i'])
-    df['log_alpha_not_i'] = np.log(df['alpha_not_i'])
-
-    df_melted = df.melt(value_vars=['log_alpha_i', 'log_alpha_not_i'], 
-                        var_name='Parameter', value_name='Log_Value')
     
+    df_melted = df.melt(
+        value_vars=['alpha_i', 'alpha_not_i'],
+        var_name='Parameter',
+        value_name='Value'
+    )
+
     df_melted['Parameter'] = df_melted['Parameter'].replace({
-        'log_alpha_i': r'$\alpha_i$',
-        'log_alpha_not_i': r'$\alpha_{\neg i}$'
+        'alpha_i': r'$\alpha_i$',
+        'alpha_not_i': r'$\alpha_{\neg i}$'
     })
 
-    print("Generating log-distribution plot...")
-    
     p = (
-        ggplot(df_melted, aes(x='Log_Value', fill='Parameter'))
-        + geom_histogram(bins=80, alpha=0.90, position='identity', show_legend=True)
+        ggplot(df_melted, aes(x='Value', fill='Parameter'))
+        + geom_histogram(bins=80, alpha=0.90, position='identity')
+        + scale_x_log10(trans=log_trans(base=np.e),
+            breaks=lambda x: [10**i for i in range(-2, 5)],
+            labels=lambda x: [f"{val:.2f}" for val in x]
+        )
         + labs(
             x='Parameter value',
             y='Frequency',
@@ -35,10 +38,16 @@ def main():
             fill='Parameter'
         )
         + scale_fill_manual(values={
-            r'$\alpha_i$': '#619CFF', 
+            r'$\alpha_i$': '#619CFF',
             r'$\alpha_{\neg i}$': '#FDB863'
         })
         + theme_minimal()
+        + theme(
+            legend_position=(0.98, 0.80),   
+            legend_justification=(1, -0.25),    
+            legend_background=element_blank(),
+            legend_key=element_blank()
+        )
     )
 
     p.save("parameter-distribution-20ng.pdf", width=10, height=6, dpi=300)
