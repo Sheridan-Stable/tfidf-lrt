@@ -65,13 +65,13 @@ def main():
 
     print("Vectorizing...")
     # min_df=5
-    vectorizer = CountVectorizer(stop_words='english', min_df=5) 
+    vectorizer = CountVectorizer(stop_words='english') 
     X = vectorizer.fit_transform(data)
     vocab = vectorizer.get_feature_names_out()
     doc_lengths = np.array(X.sum(axis=1)).flatten()
     
     print(f"Vocabulary size: {len(vocab)}")
-    print("Fitting Beta-Binomial models for R8 terms...")
+    print("Fitting beta-binomial models for R8 terms...")
     
     alphas_i = []
     alphas_not_i = []
@@ -95,23 +95,7 @@ def main():
 
     # Save CSV
     df = pd.DataFrame({'term': vocab, 'alpha_i': alphas_i, 'alpha_not_i': alphas_not_i})
-    df.to_csv('r8_bb_params.csv', index=False)
+    df.to_csv('../reports/r8-bb-params-mle.csv', index=False)
     
-    # Visualization
-    print("Generating plots...")
-    plt.figure(figsize=(12, 5))
-    
-    plt.subplot(1, 2, 1)
-    plt.hist(np.log(alphas_i), bins=50, color='skyblue', alpha=0.7, label='log(alpha_i)')
-    plt.hist(np.log(alphas_not_i), bins=50, color='orange', alpha=0.7, label='log(alpha_not_i)')
-    plt.xlabel('Log parameter value')
-    plt.ylabel('Frequency')
-    plt.title('R8: Distribution of beta-binomial parameters')
-    plt.legend()
-    
-    plt.tight_layout()
-    plt.savefig('r8_beta_binomial_verification.png')
-    print("Saved results to r8_bb_params.csv and r8_beta_binomial_verification.png")
-
 if __name__ == "__main__":
     main()

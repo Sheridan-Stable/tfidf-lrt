@@ -92,7 +92,7 @@ class LambdaTransformer(BaseEstimator, TransformerMixin):
                     + n_j[j] * log(n / (b_i + n_not_i))
                     - (b_ij[j] + 1/(2*d)) * log(mu)
                     + (1/(2*d)) * (
-                        (eta2 - 2*r_i + 1) * log(max(eta2 - r_i, 1))
+                        (eta2 - 2*r_i + 1) * log(max(eta2 - r_i, 1)) # evaluates to 0 if eta2 - r_i <= 0
                         - (eta2 - 1.5) * log(max(eta2, 1e-9))
                         + r_i
                         - log(sqrt(2 * pi))
@@ -132,9 +132,9 @@ def main():
     print("Canonical TF-IDF Results:")
     report = metrics.classification_report(y_test, predicted)
     print(report)
-    with open("tf-idf-report.txt", "w") as f:
+    with open("../reports/tf-idf-report.txt", "w") as f:
         f.write(report)
-    print("Report saved to tf-idf-report.txt\n")
+    print("Report saved to ../reports/tf-idf-report.txt\n")
 
 
     print("Training and evaluating Lambda_i model...")
@@ -148,9 +148,9 @@ def main():
     print("Lambda_i Results:")
     report = metrics.classification_report(y_test, predicted)
     print(report)
-    with open("lambda-i-report.txt", "w") as f:
+    with open("../reports/lambda-i-report.txt", "w") as f:
         f.write(report)
-    print("Report saved to lambda-i-report.txt")
+    print("Report saved to ../reports/lambda-i-report.txt")
 
 
 if __name__ == "__main__":

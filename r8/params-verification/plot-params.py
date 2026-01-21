@@ -8,9 +8,9 @@ from mizani.transforms import log_trans
 
 def main():
     try:
-        df = pd.read_csv("bb_params_verification.csv")
+        df = pd.read_csv("../reports/r8-bb-params-mle.csv")
     except FileNotFoundError:
-        print("Error: 'bb_params_verification.csv' not found.")
+        print("Error: 'r8-bb-params-mle.csv' not found.")
         return
     
     df_melted = df.melt(
@@ -44,13 +44,13 @@ def main():
         + theme_minimal()
         + theme(
             legend_position=(0.98, 0.80),   
-            legend_justification=(1, -0.25),    
+            legend_justification=(1, 0),    
             legend_background=element_blank(),
             legend_key=element_blank()
         )
     )
 
-    p.save("parameter-distribution-20ng.pdf", width=10, height=6, dpi=300)
+    p.save("../plots/parameters-distributions-r8.pdf", width=10, height=6, dpi=300)
     print("Plot saved successfully.")
 
 if __name__ == "__main__":

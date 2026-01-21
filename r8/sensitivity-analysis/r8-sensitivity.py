@@ -2,7 +2,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn.naive_bayes import MultinomialNB
-from sklearn.pipeline import Pipeline
 from sklearn import metrics
 from sklearn.feature_extraction.text import CountVectorizer
 from scipy import sparse
@@ -54,7 +53,7 @@ def clean_text(text):
 
 def log_fact(n):
     return gammaln(n + 1)
-class VectorizedLambdaTransformer(BaseEstimator, TransformerMixin):
+class LambdaTransformer(BaseEstimator, TransformerMixin):
     def __init__(self, mu=119, sigma2=1.0):
         self.mu = mu
         self.sigma2 = sigma2
@@ -137,7 +136,7 @@ def main():
     print("Generating sensitivity analysis grid...")
     for i, s2 in enumerate(sigma_values[::-1]):
         for j, m in enumerate(mu_values):
-            lt = VectorizedLambdaTransformer(mu=m, sigma2=s2)
+            lt = LambdaTransformer(mu=m, sigma2=s2)
             X_train_lam = lt.transform(X_train_counts)
             X_test_lam = lt.transform(X_test_counts)
             
