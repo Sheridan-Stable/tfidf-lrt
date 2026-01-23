@@ -160,7 +160,7 @@ def main():
     )
     print(report)
 
-    with open("r8-tfidf-report.txt", "w") as f:
+    with open("../reports/r8-tfidf-report.txt", "w") as f:
         f.write(report)
 
     print("Training and evaluating Lambda_i model...")
@@ -178,7 +178,7 @@ def main():
     )
     print(report)
 
-    with open("r8-lambda-i-report.txt", "w") as f:
+    with open("../reports/r8-lambda-i-report.txt", "w") as f:
         f.write(report)
 
 if __name__ == "__main__":
