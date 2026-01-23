@@ -91,27 +91,26 @@ class LambdaTransformer(BaseEstimator, TransformerMixin):
                 if n_ij[j] == 0:
                     continue
 
-                if eta2 - r_i > 0:
-                    tf_icf = n_ij[j] * log(n / n_i)
-                    tbf_idf = b_ij[j] * log(d / b_i) if b_i > 0 else 0
-                    correction = -log(n_ij[j]) * b_ij[j] + log_fact(n_ij[j])
+                # if eta2 - r_i > 0:
+                tf_icf = n_ij[j] * log(n / n_i)
+                tbf_idf = b_ij[j] * log(d / b_i) if b_i > 0 else 0
+                correction = -log(n_ij[j]) * b_ij[j] + log_fact(n_ij[j])
 
-                    penalty = (
-                        (n_ij[j] - b_ij[j]) * log((b_i + n_not_i) / (d * sigma2))
-                        + n_j[j] * log(n / (b_i + n_not_i))
-                            - (b_ij[j] + 1 / (2 * d)) * log(mu)
-                            + (1 / (2 * d)) * (
-                                (eta2 - 2 * r_i + 1) * log(eta2 - r_i)
-                                - (eta2 - 1.5) * log(max(eta2, 1e-9))
-                                + r_i
-                                - log(sqrt(2 * pi))
-                            )
+                penalty = (
+                    (n_ij[j] - b_ij[j]) * log((b_i + n_not_i) / (d * sigma2))
+                    + n_j[j] * log(n / (b_i + n_not_i))
+                        - (b_ij[j] + 1 / (2 * d)) * log(mu)
+                        + (1 / (2 * d)) * (
+                            (eta2 - 2 * r_i + 1) * log(max(eta2 - r_i, 1)) # evaluates to 0 if eta2 - r_i <= 0
+                            - (eta2 - 1.5) * log(max(eta2, 1e-9))
+                            + r_i
+                            # - log(sqrt(2 * pi)) removed
                         )
+                    )
 
-                    lam = tf_icf - tbf_idf + correction + penalty
-                else:
-                    lam = 0
-                    fallback += 1
+                lam = tf_icf - tbf_idf + correction + penalty
+                # else:
+                #     lam = 0
 
                 lam = 1 / (1 + np.exp(-lam))
                 rows.append(j)

@@ -73,7 +73,7 @@ class LambdaTransformer(BaseEstimator, TransformerMixin):
                             (eta2 - 2*r_i + 1) * log(max(eta2 - r_i, 1)) # evaluates to 0 if eta2 - r_i <= 0
                             - (eta2 - 1.5) * log(max(eta2, 1e-9))
                             + r_i
-                            - log(sqrt(2 * pi))
+                            # - log(sqrt(2 * pi)) removed
                         )
                     )
 
