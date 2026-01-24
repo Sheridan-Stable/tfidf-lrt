@@ -64,7 +64,7 @@ def main():
                     (eta2 - 2*r_i + 1) * log(eta2 - r_i)
                     - (eta2 - 1.5) * log(eta2)
                     + r_i
-                    - log(sqrt(2 * pi))
+                    # - log(sqrt(2 * pi)) removed constant term
                 )
             )
             lambda_summand.append(2 * (tf_icf - tbf_idf + correction + penalty))
@@ -93,10 +93,12 @@ def main():
     )
 
     print("Saving scatter plot to 'lambda_tfidf.pdf'...")
-    p.save("lambda_tfidf.pdf", dpi=300)
+    p.save("./plots/lambda_tfidf.pdf", dpi=300)
     print("Scatter plot saved.")
     corr = np.corrcoef(sum_tfidf_vals, lambda_vals)[0, 1]
-    print("\nCorrelation between lambda_i and total TF-IDF$:", corr)
+    print("\nCorrelation between lambda_i and total TF-IDF:", corr)
+    with open("./reports/tfidf-lambda-correlation.txt", "w") as f:
+        f.write(f"Correlation between lambda_i and total TF-IDF: {corr}")
 
 
 if __name__ == "__main__":

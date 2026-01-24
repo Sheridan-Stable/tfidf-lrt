@@ -1,0 +1,1 @@
+Correlation between lambda_i and total TF-IDF: 0.9269144755768569
