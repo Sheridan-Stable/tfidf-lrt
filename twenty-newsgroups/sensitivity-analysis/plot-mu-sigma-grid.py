@@ -22,7 +22,7 @@ def log_fact(n):
     return gammaln(n + 1)
 
 class LambdaTransformer(BaseEstimator, TransformerMixin):
-    def __init__(self, mu=165, sigma2=1.0):
+    def __init__(self, mu, sigma2=1.0):
         self.mu = mu
         self.sigma2 = sigma2
 
