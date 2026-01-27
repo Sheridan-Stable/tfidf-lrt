@@ -5,7 +5,6 @@ from sklearn.feature_extraction.text import CountVectorizer
 import numpy as np
 from scipy import sparse
 from sklearn.base import BaseEstimator, TransformerMixin
-from math import log, sqrt, pi
 from scipy.special import gammaln
 import re
 from nltk.corpus import reuters

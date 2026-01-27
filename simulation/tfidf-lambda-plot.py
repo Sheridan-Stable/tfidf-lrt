@@ -1,11 +1,12 @@
 import numpy as np
-from math import factorial, log, sqrt, pi
+from math import log
 from numpy.random import default_rng
 import pandas as pd
 from plotnine import ggplot, aes, geom_point, labs, theme_minimal
+from scipy.special import gammaln
 
 def log_fact(x):
-    return log(factorial(int(x))) if x > 1 else 0.0
+    return gammaln(x + 1)
 
 def main():
     rng = default_rng(42)

@@ -8,8 +8,6 @@ from scipy import sparse
 from sklearn.base import BaseEstimator, TransformerMixin
 from scipy.special import gammaln
 import re
-from math import log, sqrt, pi
-
 from nltk.corpus import reuters
 
 def load_r8():

@@ -1,5 +1,4 @@
 import numpy as np
-import matplotlib.pyplot as plt
 import pandas as pd
 from sklearn.feature_extraction.text import CountVectorizer
 from scipy.optimize import minimize
