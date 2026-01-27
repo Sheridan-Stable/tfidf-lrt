@@ -51,6 +51,57 @@ class CanonicalTfidfTransformer(BaseEstimator, TransformerMixin):
 
       return sparse.csr_matrix(tfidf)
 
+class LambdaTransformer(BaseEstimator, TransformerMixin):
+    def __init__(self, mu, sigma2=1.0):
+        self.mu = mu
+        self.sigma2 = sigma2
+
+    def fit(self, X, y=None):
+        return self
+
+    def transform(self, X, y=None):
+        X = X.tocsr()
+        d, t = X.shape
+
+        # Document stats
+        n_j = X.sum(axis=1).A1
+        n = n_j.sum()
+
+        # Term stats
+        n_i = X.sum(axis=0).A1
+        b_i = (X > 0).sum(axis=0).A1
+        n_not_i = n - n_i
+        r_i = n_i - b_i + 1
+
+        mu = self.mu
+        sigma2 = self.sigma2
+        eta2 = mu ** 2 / sigma2
+
+        rows, cols = X.nonzero()
+        n_ij = X.data
+
+        # Vectorized components
+        tf_icf = n_ij * np.log(n / n_i[cols])
+        tbf_idf = np.log(d / b_i[cols])
+
+        correction = -np.log(n_ij) + gammaln(n_ij + 1)
+
+        penalty = (
+            (n_ij - 1) * np.log((b_i[cols] + n_not_i[cols]) / (d * sigma2))
+            + n_j[rows] * np.log(n / (b_i[cols] + n_not_i[cols]))
+            - (1 + 1 / (2 * d)) * np.log(mu)
+            + (1 / (2 * d)) * (
+                (eta2 - 2 * r_i[cols] + 1)
+                * np.log(np.maximum(eta2 - r_i[cols], 1))
+                - (eta2 - 1.5) * np.log(np.maximum(eta2, 1e-9))
+                + r_i[cols]
+            )
+        )
+
+        lam = tf_icf - tbf_idf + correction + penalty
+        lam = 1 / (1 + np.exp(-lam))
+
+        return sparse.csr_matrix((lam, (rows, cols)), shape=(d, t))
 
 def main(): 
     print("Loading 20 Newsgroups dataset...")
@@ -76,11 +127,16 @@ def main():
     with open("../reports/tf-idf-report.txt", "w") as f:
         f.write(report)
     print("Report saved to ../reports/tf-idf-report.txt\n")
-    print("--------------------------------\n")
+
+    # Vectorize to get mean document length
+    vect = CountVectorizer(stop_words='english')
+    X_train_counts = vect.fit_transform(X_train)
+    mu_mean_doc_length = X_train_counts.sum(axis=1).mean()
+    print(f"Mean document length (train): {mu_mean_doc_length:.2f}")
 
     print("Training and evaluating Lambda_i model...")
     text_clf = Pipeline([('vect', CountVectorizer(stop_words='english')),
-                        ('lambda', LambdaTransformer()),
+                        ('lambda', LambdaTransformer(mu=mu_mean_doc_length)),
                         ('clf', MultinomialNB()),
                         ])
 
