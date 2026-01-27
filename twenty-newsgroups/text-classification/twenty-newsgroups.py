@@ -28,28 +28,21 @@ class CanonicalTfidfTransformer(BaseEstimator, TransformerMixin):
         return self
 
     def transform(self, X, y=None):
-      # Initialize scoring matrix
-      d, m = X.shape
-      Nj = X.sum(axis=1)
-      tfidf = np.empty(shape=(d, m), dtype=np.float32)
-      
-      # Calculate IDF scores
-      a = X.nonzero()[1]
-      indices, counts = np.unique(a, return_counts=True)
-      Bi = np.zeros(m)
-      for i in range(len(indices)):
-        index = indices[i]
-        Bi[index] = counts[i]
-      for i in range(m):
-        if Bi[i] == 0:
-          Bi[i] = 1
-      IDF = np.log(d / Bi)
-      
-      # Calculate TF-IDF scores
-      for j in range(d):
-        tfidf[j] = np.multiply(X[j].toarray(), IDF)
+        d, m = X.shape
+        tfidf = np.empty((d, m), dtype=np.float32)
 
-      return sparse.csr_matrix(tfidf)
+        # document frequency
+        a = X.nonzero()[1]
+        indices, counts = np.unique(a, return_counts=True)
+        Bi = np.ones(m)
+        Bi[indices] = counts
+
+        IDF = np.log(d / Bi)
+
+        for j in range(d):
+            tfidf[j] = np.multiply(X[j].toarray(), IDF)
+
+        return sparse.csr_matrix(tfidf)
 
 class LambdaTransformer(BaseEstimator, TransformerMixin):
     def __init__(self, mu, sigma2=1.0):
