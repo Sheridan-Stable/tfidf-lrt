@@ -21,6 +21,7 @@ def clean_text(text):
 
 def log_fact(n):
     return gammaln(n + 1)
+
 class LambdaTransformer(BaseEstimator, TransformerMixin):
     def __init__(self, mu=165, sigma2=1.0):
         self.mu = mu
@@ -30,62 +31,48 @@ class LambdaTransformer(BaseEstimator, TransformerMixin):
         return self
 
     def transform(self, X, y=None):
-        fallback = 0
+        X = X.tocsr()
         d, t = X.shape
-        X = sparse.csr_matrix(X)
-        n_j = np.array(X.sum(axis=1)).flatten()
-        n = np.sum(n_j)
+
+        # Document stats
+        n_j = X.sum(axis=1).A1
+        n = n_j.sum()
+
+        # Term stats
+        n_i = X.sum(axis=0).A1
+        b_i = (X > 0).sum(axis=0).A1
+        n_not_i = n - n_i
+        r_i = n_i - b_i + 1
 
         mu = self.mu
         sigma2 = self.sigma2
         eta2 = mu ** 2 / sigma2
 
-        rows, cols, data = [], [], []
+        rows, cols = X.nonzero()
+        n_ij = X.data
 
-        for i in range(t):
-            n_ij = X[:, i].toarray().flatten()
-            n_not_ij = n_j - n_ij
-            b_ij = (n_ij > 0).astype(int)
+        # Vectorized components
+        tf_icf = n_ij * np.log(n / n_i[cols])
+        tbf_idf = np.log(d / b_i[cols])
 
-            n_i = np.sum(n_ij)
-            if n_i == 0:
-                continue
+        correction = -np.log(n_ij) + gammaln(n_ij + 1)
 
-            b_i = np.sum(b_ij)
-            n_not_i = np.sum(n_not_ij)
-            r_i = n_i - b_i + 1
+        penalty = (
+            (n_ij - 1) * np.log((b_i[cols] + n_not_i[cols]) / (d * sigma2))
+            + n_j[rows] * np.log(n / (b_i[cols] + n_not_i[cols]))
+            - (1 + 1 / (2 * d)) * np.log(mu)
+            + (1 / (2 * d)) * (
+                (eta2 - 2 * r_i[cols] + 1)
+                * np.log(np.maximum(eta2 - r_i[cols], 1))
+                - (eta2 - 1.5) * np.log(np.maximum(eta2, 1e-9))
+                + r_i[cols]
+            )
+        )
 
-            for j in range(d):
-                if n_ij[j] == 0:
-                    continue
+        lam = tf_icf - tbf_idf + correction + penalty
+        lam = 1 / (1 + np.exp(-lam))
 
-                if eta2 - r_i <= 0:
-                    fallback += 1
-                tf_icf = n_ij[j] * log(n / n_i)
-                tbf_idf = b_ij[j] * log(d / b_i) if b_i > 0 else 0
-                correction = -log(n_ij[j]) * b_ij[j] + log_fact(n_ij[j])
-
-                penalty = (
-                    (n_ij[j] - b_ij[j]) * log((b_i + n_not_i) / (d * sigma2))
-                    + n_j[j] * log(n / (b_i + n_not_i))
-                        - (b_ij[j] + 1 / (2 * d)) * log(mu)
-                        + (1 / (2 * d)) * (
-                            (eta2 - 2*r_i + 1) * log(max(eta2 - r_i, 1)) # evaluates to 0 if eta2 - r_i <= 0
-                            - (eta2 - 1.5) * log(max(eta2, 1e-9))
-                            + r_i
-                            # - log(sqrt(2 * pi)) removed
-                        )
-                    )
-
-                lam = tf_icf - tbf_idf + correction + penalty
-
-                lam = 1 / (1 + np.exp(-lam))
-                rows.append(j)
-                cols.append(i)
-                data.append(lam)
-
-        print(f"Fallback: {fallback}")
-        return sparse.csr_matrix((data, (rows, cols)), shape=(d, t))
+        return sparse.csr_matrix((lam, (rows, cols)), shape=(d, t))
 
 def main():
 
@@ -98,14 +85,17 @@ def main():
     y_train = train.target
     y_test = test.target
 
-    mu_values = [130, 160, 190, 220, 250, 280]
+    mu_values = [30, 60, 90, 120, 150, 180]
     sigma_values = [0.2, 0.4, 0.6, 0.8, 1.0]
     results = np.zeros((len(sigma_values), len(mu_values)))
 
     # Vectorize text once
-    vect = CountVectorizer(stop_words="english", min_df=10)
+    vect = CountVectorizer(stop_words="english")
     X_train_counts = vect.fit_transform(X_train_raw)
     X_test_counts = vect.transform(X_test_raw)
+
+    # Print mean document length to two decimal places
+    print(f"Mean document length: {X_train_counts.sum(axis=1).mean():.2f}")
 
     print("Generating sensitivity analysis grid...")
     for i, s2 in enumerate(sigma_values[::-1]):

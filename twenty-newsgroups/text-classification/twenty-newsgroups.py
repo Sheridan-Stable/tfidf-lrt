@@ -51,64 +51,6 @@ class CanonicalTfidfTransformer(BaseEstimator, TransformerMixin):
         tfidf[j] = np.multiply(X[j].toarray(), IDF)
 
       return sparse.csr_matrix(tfidf)
-    
-
-class LambdaTransformer(BaseEstimator, TransformerMixin):
-
-    def fit(self, X, y=None):
-        return self
-
-    def transform(self, X, y=None):
-        d, t = X.shape
-        X = sparse.csr_matrix(X)
-        n_j = np.array(X.sum(axis=1)).flatten()   
-        n = np.sum(n_j)
-        mu = 165.2860173236698 
-        sigma2 = 1
-        eta2 = mu**2 / sigma2
-        rows, cols, data = [], [], []
-
-        for i in range(t):  
-            n_ij = X[:, i].toarray().flatten()
-            n_not_ij = n_j - n_ij
-            b_ij = (n_ij > 0).astype(int)
-
-            n_i = np.sum(n_ij)
-            if n_i == 0:
-                continue
-            b_i = np.sum(b_ij)
-            n_not_i = np.sum(n_not_ij)
-            r_i = n_i - b_i + 1
-
-            for j in range(d):
-                if n_ij[j] == 0:
-                    continue
-                # if eta2 - r_i > 0:
-                tf_icf = n_ij[j] * log(n / n_i)
-                tbf_idf = b_ij[j] * log(d / b_i) if b_i > 0 else 0
-                correction = - log(n_ij[j]) * b_ij[j] + log_fact(n_ij[j])
-                penalty = (
-                    (n_ij[j] - b_ij[j]) * log((b_i + n_not_i) / (d * sigma2))
-                    + n_j[j] * log(n / (b_i + n_not_i))
-                    - (b_ij[j] + 1/(2*d)) * log(mu)
-                    + (1/(2*d)) * (
-                        (eta2 - 2*r_i + 1) * log(max(eta2 - r_i, 1)) # evaluates to 0 if eta2 - r_i <= 0
-                        - (eta2 - 1.5) * log(max(eta2, 1e-9))
-                        + r_i
-                        # - log(sqrt(2 * pi)) removed
-                    )
-                )
-
-                lam = (tf_icf - tbf_idf + correction + penalty)
-                # else:
-                    # lam = 0
-                lam = 1 / (1 + np.exp(-lam))
-                rows.append(j)
-                cols.append(i)
-                data.append(lam)
-                
-        data = np.array(data)
-        return sparse.csr_matrix((data, (rows, cols)), shape=(d, t))
 
 
 def main(): 
@@ -121,7 +63,7 @@ def main():
     X_test = [clean_text(doc) for doc in newsgroups_test.data]
     y_train = newsgroups_train.target
     y_test = newsgroups_test.target
-
+    
     print("Training and evaluating TF-IDF model...")
     text_clf = Pipeline([('vect', CountVectorizer(stop_words='english')),
                         ('tfidf', CanonicalTfidfTransformer()),
@@ -135,7 +77,7 @@ def main():
     with open("../reports/tf-idf-report.txt", "w") as f:
         f.write(report)
     print("Report saved to ../reports/tf-idf-report.txt\n")
-
+    print("--------------------------------\n")
 
     print("Training and evaluating Lambda_i model...")
     text_clf = Pipeline([('vect', CountVectorizer(stop_words='english')),
