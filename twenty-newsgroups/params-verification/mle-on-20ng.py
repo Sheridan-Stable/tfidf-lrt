@@ -48,14 +48,13 @@ def fit_beta_binomial(term_counts, total_counts):
 
 def main():
     print("Loading 20 Newsgroups dataset...")
-    newsgroups_train = fetch_20newsgroups(subset='train', remove=('headers', 'footers', 'quotes'))
+    newsgroups_train = fetch_20newsgroups(subset='train', remove=('headers', 'footers', 'quotes'), categories=['alt.atheism', 'soc.religion.christian', 'comp.graphics', 'sci.med'])
     
     print("Cleaning text data...")
     data = [clean_text(doc) for doc in newsgroups_train.data]
 
     print("Vectorizing...")
-    # min_df=10 to remove ultra-rare words to speed up and stabilize fitting
-    vectorizer = CountVectorizer(min_df=10) 
+    vectorizer = CountVectorizer() 
     X = vectorizer.fit_transform(data)
     vocab = vectorizer.get_feature_names_out()
     

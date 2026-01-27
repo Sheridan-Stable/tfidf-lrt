@@ -63,7 +63,6 @@ def main():
     data = load_r8()
 
     print("Vectorizing...")
-    # min_df=5
     vectorizer = CountVectorizer(stop_words='english') 
     X = vectorizer.fit_transform(data)
     vocab = vectorizer.get_feature_names_out()

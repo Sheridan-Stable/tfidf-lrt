@@ -208,3 +208,6 @@ __marimo__/
 
 # DS store
 .DS_Store
+
+# archived dir
+archived/

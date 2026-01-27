@@ -135,7 +135,7 @@ def main():
     print(f"Mean document length (train): {mu_mean_doc_length:.2f}")
 
     print("Training and evaluating Lambda_i model...")
-    text_clf = Pipeline([('vect', CountVectorizer(stop_words='english')),
+    text_clf = Pipeline([('vect', vect),
                         ('lambda', LambdaTransformer(mu=mu_mean_doc_length)),
                         ('clf', MultinomialNB()),
                         ])

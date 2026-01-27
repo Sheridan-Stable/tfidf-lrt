@@ -44,7 +44,7 @@ class CanonicalTfidfTransformer(BaseEstimator, TransformerMixin):
 
 
 class LambdaTransformer(BaseEstimator, TransformerMixin):
-    def __init__(self, mu=119, sigma2=1.0):
+    def __init__(self, mu, sigma2=1.0):
         self.mu = mu
         self.sigma2 = sigma2
 
@@ -151,10 +151,17 @@ def main():
     with open("../reports/r8-tfidf-report.txt", "w") as f:
         f.write(report)
 
+
+    # Vectorize to get mean document length
+    vect = CountVectorizer(stop_words='english')
+    X_train_counts = vect.fit_transform(X_train)
+    mu_mean_doc_length = X_train_counts.sum(axis=1).mean()
+    print(f"Mean document length (train): {mu_mean_doc_length:.2f}")
+
     print("Training and evaluating Lambda_i model...")
     text_clf = Pipeline([
-        ('vect', CountVectorizer(stop_words='english')),
-        ('lambda', LambdaTransformer()),
+        ('vect', vect),
+        ('lambda', LambdaTransformer(mu=mu_mean_doc_length)),
         ('clf', MultinomialNB()),
     ])
 
