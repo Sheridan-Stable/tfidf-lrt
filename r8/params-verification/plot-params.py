@@ -43,7 +43,7 @@ def main():
         })
         + theme_minimal()
         + theme(
-            legend_position=(0.98, 0.80),   
+            legend_position=(0.98, 0.83),   
             legend_justification=(1, 0),    
             legend_background=element_blank(),
             legend_key=element_blank()
