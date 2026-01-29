@@ -85,7 +85,7 @@ def main():
     y_test = test.target
 
     mu_values = [30, 60, 90, 120, 150, 180]
-    sigma_values = [0.2, 0.4, 0.6, 0.8, 1.0]
+    sigma_values = [0.5, 1.0, 2.0, 3.0, 4.0, 5.0]
     results = np.zeros((len(sigma_values), len(mu_values)))
 
     # Vectorize text once
@@ -95,6 +95,10 @@ def main():
 
     # Print mean document length to two decimal places
     print(f"Mean document length: {X_train_counts.sum(axis=1).mean():.2f}")
+    print(f"Vocabulary size of training set: {X_train_counts.shape[1]}")
+    print(f"Number of documents in training set: {X_train_counts.shape[0]}")
+    print(f"Vocabulary size of test set: {X_test_counts.shape[1]}")
+    print(f"Number of documents in test set: {X_test_counts.shape[0]}")
 
     print("Generating sensitivity analysis grid...")
     for i, s2 in enumerate(sigma_values[::-1]):
