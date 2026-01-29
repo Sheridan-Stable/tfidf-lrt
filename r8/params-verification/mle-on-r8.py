@@ -63,12 +63,11 @@ def main():
     data = load_r8()
 
     print("Vectorizing...")
-    vectorizer = CountVectorizer(stop_words='english') 
+    vectorizer = CountVectorizer() 
     X = vectorizer.fit_transform(data)
     vocab = vectorizer.get_feature_names_out()
     doc_lengths = np.array(X.sum(axis=1)).flatten()
     
-    print(f"Vocabulary size: {len(vocab)}")
     print("Fitting beta-binomial models for R8 terms...")
     
     alphas_i = []
