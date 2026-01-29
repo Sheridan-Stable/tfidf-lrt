@@ -48,7 +48,7 @@ def fit_beta_binomial(term_counts, total_counts):
 
 def main():
     print("Loading 20 Newsgroups dataset...")
-    newsgroups_train = fetch_20newsgroups(subset='train', remove=('headers', 'footers', 'quotes'), categories=['alt.atheism', 'soc.religion.christian', 'comp.graphics', 'sci.med'])
+    newsgroups_train = fetch_20newsgroups(subset='train', remove=('headers', 'footers', 'quotes'))
     
     print("Cleaning text data...")
     data = [clean_text(doc) for doc in newsgroups_train.data]
@@ -61,6 +61,8 @@ def main():
     doc_lengths = np.array(X.sum(axis=1)).flatten()
     
     print(f"Vocabulary size: {len(vocab)}")
+    print(f"Number of documents: {len(doc_lengths)}")
+    print(f"X shape: {X.shape}")
     print("Fitting beta-binomial models (this may take a while)...")
     
     alphas_i = []
