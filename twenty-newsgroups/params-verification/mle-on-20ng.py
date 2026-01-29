@@ -60,9 +60,6 @@ def main():
     
     doc_lengths = np.array(X.sum(axis=1)).flatten()
     
-    print(f"Vocabulary size: {len(vocab)}")
-    print(f"Number of documents: {len(doc_lengths)}")
-    print(f"X shape: {X.shape}")
     print("Fitting beta-binomial models (this may take a while)...")
     
     alphas_i = []
