@@ -11,7 +11,8 @@ git clone https://github.com/sheridan-stable/tfidf-lrt.git
 and `cd` into the repository root folder `tfidf-lrt`.
 
 ## Reproducing Plots and Tables
-This section steps through how to reproduce the results from Figures 1, 2, 3, and Table 2 in the manuscript. Repository code is written in Python 3. Below is one way to reproduce each plot:
+
+This section steps through how to reproduce the results described in the manuscript.
 
 From the command line, create a virtual environment:
 ```
@@ -25,29 +26,77 @@ pip install -r requirements.txt
 
 Each Python script can be run independently:
 
+### Figures
+
+**Figure 1**
 ```bash
-# Generate beta-binomial plots (Figure 1)
 python3 bcb-precision-plot.py
+```
 
-# Generate likelihood surface comparison plots (Figure 2)
+**Figure 2**
+```bash
 python3 bcb-comparison-plots.py
+```
 
-# Generate lambda_i vs TF-IDF scatter plot (Figure 3)
+**Figure 3**
+```bash
+cd simulation
 python3 tfidf-lambda-plot.py
+```
 
-# Generate text classification results (Table 2)
+**Figure 4**
+```bash
+cd twenty-newsgroups/params-verification
+python3 mle-on-20ng.py
+python3 plot-params.py
+```
+
+**Figure 5**
+```bash
+cd r8/params-verification
+python3 mle-on-r8.py
+python3 plot-params.py
+```
+
+**Figure A1**
+```bash
+cd twenty-newsgroups/sensitivity-analysis
+python3 plot-mu-sigma-grid.py
+```
+
+**Figure A2**
+```bash
+cd r8/sensitivity-analysis
+python3 plot-mu-sigma-grid.py
+```
+
+### Tables
+
+**Table 2**
+```bash
+cd twenty-newsgroups/text-classification
 python3 twenty-newsgroups.py
+```
+
+**Table 3**
+```bash
+cd r8/text-classification
+python3 r8.py
 ```
 
 ## Outputs
 
-The scripts generate several visualization outputs:
+The scripts generate the following outputs corresponding to the manuscript figures and tables:
 
-- `bcb_precision_plot.pdf`: Visualization of beta-binomial distributions under different parameters (Figure 1)
-- `bcb_comparison_plot.pdf`: Contour and 3D surface plots comparing penalized and unpenalized beta-binomial log-likelihood functions (Figure 2)
-- `lambda_tfidf.pdf`: Scatter plot showing relationship between lambda_i scores and TF-IDF scores (Figure 3)
-- `tf-idf-report.txt`: Classification performance metrics using TF-IDF (Table 2)
-- `lambda-i-report.txt`: Classification performance metrics using $S(\lambda_i)$ (Table 2)
+- **Figure 1**: `bcb_precision_plot.pdf`
+- **Figure 2**: `bcb_comparison_plot.pdf`
+- **Figure 3**: `simulation/tfidf-lambda.pdf` (and `simulation/reports/tfidf-lambda-correlation.txt`)
+- **Figure 4**: `twenty-newsgroups/plots/20ng-params-mle.pdf` (from `plot-params.py`, data from `reports/20ng-bb-params-mle.csv`)
+- **Figure 5**: `r8/plots/r8-params-mle.pdf` (from `plot-params.py`, data from `reports/r8-bb-params-mle.csv`)
+- **Figure A1**: `twenty-newsgroups/plots/20ng-sensitivity-analysis-grid.pdf`
+- **Figure A2**: `r8/plots/r8-sensitivity-analysis-grid.pdf`
+- **Table 2**: `twenty-newsgroups/reports/tf-idf-report.txt` and `twenty-newsgroups/reports/lambda-i-report.txt`
+- **Table 3**: `r8/reports/r8-tfidf-report.txt` and `r8/reports/r8-lambda-i-report.txt`
 
 
 
