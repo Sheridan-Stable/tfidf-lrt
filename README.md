@@ -23,6 +23,9 @@ Install required libraries:
 ```
 pip install -r requirements.txt
 ```
+```
+cd tfidf-lrt
+```
 
 Each Python script can be run independently:
 
