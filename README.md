@@ -121,10 +121,11 @@ For more open-ended inquiries, we encourage starting a [discussion](https://gith
 ## Citation
 If you find anything useful please cite our work using:
 ```
-@misc{Ahmed2025,
+@misc{Ahmed2026,
   author = {Zeyad Ahmed and Paul Sheridan and Michael McIsaac and Aitazaz A. Farooque},
   title = {Common {TF}–{IDF} variants arise as key components in the test statistic of a penalized likelihood-ratio test for word burstiness},
-  year = {2025},
-  eprint = {arXiv:XXXX.XXXXX}
+  journal = {Discover Computing},
+ year = {2026},
+ note = "(Revision requested)"
 }
 ```
