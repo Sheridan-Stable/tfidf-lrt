@@ -45,32 +45,39 @@ python3 bcb-comparison-plots.py
 ```bash
 cd simulation
 python3 tfidf-lambda-plot.py
+cd ..
 ```
 
 **Figure 4**
 ```bash
 cd twenty-newsgroups/params-verification
+# The following line is optional if ../reports/20ng-bb-params-mle.csv already exists
 python3 mle-on-20ng.py
 python3 plot-params.py
+cd ../..
 ```
 
 **Figure 5**
 ```bash
 cd r8/params-verification
+# The following line is optional if ../reports/r8-bb-params-mle.csv already exists
 python3 mle-on-r8.py
 python3 plot-params.py
+cd ../..
 ```
 
 **Figure A1**
 ```bash
 cd twenty-newsgroups/sensitivity-analysis
 python3 plot-mu-sigma-grid.py
+cd ../..
 ```
 
 **Figure A2**
 ```bash
 cd r8/sensitivity-analysis
 python3 plot-mu-sigma-grid.py
+cd ../..
 ```
 
 ### Tables
@@ -79,12 +86,14 @@ python3 plot-mu-sigma-grid.py
 ```bash
 cd twenty-newsgroups/text-classification
 python3 twenty-newsgroups.py
+cd ../..
 ```
 
 **Table 3**
 ```bash
 cd r8/text-classification
 python3 r8.py
+cd ../..
 ```
 
 ## Outputs
