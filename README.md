@@ -9,6 +9,9 @@ Clone this repository by running the command
 git clone https://github.com/sheridan-stable/tfidf-lrt.git
 ```
 and `cd` into the repository root folder `tfidf-lrt`.
+```
+cd tfidf-lrt
+```
 
 ## Reproducing Plots and Tables
 
@@ -22,9 +25,6 @@ source bin/activate
 Install required libraries:
 ```
 pip install -r requirements.txt
-```
-```
-cd tfidf-lrt
 ```
 
 Each Python script can be run independently:
