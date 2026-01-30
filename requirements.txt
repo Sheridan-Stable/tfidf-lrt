@@ -1,6 +1,9 @@
 scikit-learn==1.6.1
 numpy==1.26.4
-scipy==1.13.1
+scipy==1.17.0
 plotnine==0.14.5
-matplotlib==3.10.0
+matplotlib==3.10.8
 pandas==2.2.3
+nltk==3.8.1
+seaborn==0.13.2
+mizani==0.13.0
