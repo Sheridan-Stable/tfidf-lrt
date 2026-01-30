@@ -1,6 +1,6 @@
-# Common TF–IDF variants arise as leading terms in a penalized likelihood-ratio test for word burstiness
+# Common TF–IDF variants arise as key components in the test statistic of a penalized likelihood-ratio test for word burstiness
 
-This repository contains computer code for reproducing the results numerical described in the manuscript “Common TF–IDF variants arise as leading terms in a penalized likelihood-ratio test for word burstiness.”
+This repository contains computer code for reproducing the results numerical described in the manuscript “Common TF–IDF variants arise as key components in the test statistic of a penalized likelihood-ratio test for word burstiness”
 
 ## Getting Started
 
@@ -111,7 +111,7 @@ If you find anything useful please cite our work using:
 ```
 @misc{Ahmed2025,
   author = {Zeyad Ahmed and Paul Sheridan and Michael McIsaac and Aitazaz A. Farooque},
-  title = {Common {TF}–{IDF} variants arise as leading terms in a penalized likelihood-ratio test for word burstiness},
+  title = {Common {TF}–{IDF} variants arise as key components in the test statistic of a penalized likelihood-ratio test for word burstiness},
   year = {2025},
   eprint = {arXiv:XXXX.XXXXX}
 }
