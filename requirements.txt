@@ -5,3 +5,5 @@ plotnine==0.14.5
 matplotlib==3.10.0
 pandas==2.2.3
 nltk==3.8.1
+seaborn==0.13.2
+mizani==0.11.4
